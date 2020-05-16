@@ -5,9 +5,11 @@ import ru.jnster.AbstructMask;
 public class Main {
 
     public static void main(String[] args) {
-        AbstructMask ellipse = new Ellipse(20,20);
-        Bundle bundle = new Bundle("img.png", ellipse);
+        int width = 10, height = 10;
+        AbstructMask ellipse = new Ellipse(width,height);
+        Bundle bundle = new Bundle("example.jpeg", ellipse, true);
         bundle.applyMasksOnFull();
-        bundle.saveTo("opa.png");
+        bundle.saveTo("result" + width + 'x' + height + '.' + bundle.getFormat() );
+        System.out.println("All is done!");
     }
 }

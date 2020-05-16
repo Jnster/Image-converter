@@ -57,4 +57,8 @@ public abstract class AbstractArtist implements Artist{
     }
 
     protected abstract void applyMaskOnPart(int X, int Y);
+
+    public String getFormat() {
+        return format;
+    }
 }

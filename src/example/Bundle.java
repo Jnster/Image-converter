@@ -8,12 +8,19 @@ import java.util.Arrays;
 
 
 public class Bundle extends AbstractArtist {
-    private int[][] matrix;
+    private final int[][] matrix;
     private boolean isFlipped = false;
+    private boolean isFiltered = true;
 
-    protected Bundle(String pathToFile, AbstructMask mask) {
+    public Bundle(String pathToFile, AbstructMask mask) {
         super(pathToFile, mask);
         this.matrix = mask.getMatrix();
+    }
+
+    public Bundle(String pathToFile, AbstructMask mask, boolean isFiltered) {
+        super(pathToFile, mask);
+        this.matrix = mask.getMatrix();
+        this.isFiltered = isFiltered;
     }
 
     private void applyMaskWithFilter (int X, int Y){
@@ -40,9 +47,11 @@ public class Bundle extends AbstractArtist {
                         }
                     }
                 } catch (ArrayIndexOutOfBoundsException are) {
+                    are.printStackTrace();
                 }
             }
         } catch (ArrayIndexOutOfBoundsException are) {
+            are.printStackTrace();
         }
     }
 
@@ -66,6 +75,7 @@ public class Bundle extends AbstractArtist {
                     }
                 }
             } catch (ArrayIndexOutOfBoundsException are){
+                are.printStackTrace();
             }
         }
     }
@@ -77,11 +87,28 @@ public class Bundle extends AbstractArtist {
         Graphics g = imageResult.getGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0,0,imageResult.getWidth(), imageResult.getHeight());
-        for (int x = 0; x < widthBound; x += width){
-            for (int y = 0; y < heightBound; y += Math.round(height * 0.6f)){
-                applyMaskWithFilter(x,y);
+        if(isFiltered) {
+            for (int x = 0; x < widthBound; x += width) {
+                for (int y = 0; y < heightBound; y += Math.round(height * 0.6f)) {
+                    applyMaskWithFilter(x, y);
+                }
+                isFlipped = !isFlipped;
             }
-            isFlipped = !isFlipped;
+        } else {
+            for (int x = 0; x < widthBound; x += width) {
+                for (int y = 0; y < heightBound; y += Math.round(height * 0.6f)) {
+                    applyMaskOnPart(x, y);
+                }
+                isFlipped = !isFlipped;
+            }
         }
+    }
+
+    public boolean isFiltered() {
+        return isFiltered;
+    }
+
+    public void setFiltered(boolean filtered) {
+        isFiltered = filtered;
     }
 }
